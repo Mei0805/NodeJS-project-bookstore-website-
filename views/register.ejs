@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="particle.css">
+  <title>Homepage</title>
+  <style>
+    .card-img img {
+      transition: transform .4s ease-in-out;
+    }
+
+    .card-img {
+      overflow: hidden;
+    }
+
+    .card-img img:hover {
+      transform: scale(1.05);
+      overflow: hidden;
+    }
+
+    h1 {
+      text-align: center;
+      font-family: 'Crimson Pro', serif;
+      font-weight: 500;
+      font-style: italic;
+
+      color: #401212;
+    }
+
+    h2 {
+      text-align: center;
+      font-family: 'Crimson Pro', serif;
+      font-weight: 500;
+      font-style: italic;
+
+      color: #401212;
+    }
+
+    h5.card-title {
+      font-family: 'Crimson Pro', serif;
+      font-weight: 300;
+
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+    }
+
+    form {
+      margin: 1rem auto;
+    }
+
+    a {
+      text-decoration: none;
+      color: black;
+    }
+
+    #mostViewTittle {
+      background-color: #8C4830;
+      color: white;
+      font-family: 'Crimson Pro', serif;
+      font-weight: 300;
+    }
+  </style>
+</head>
+
+<body>
+  <%- include("header") %>
+
+
+    <main class="container p-0 m-auto">
+      <img
+        src="https://png.pngtree.com/thumb_back/fw800/back_our/20190621/ourmid/pngtree-taobao-white-minimalist-cosmetics-background-image_192723.jpg"
+        alt="Responsive image" style="width: 100%; height: 50vh; object-fit:cover;">
+
+      <div class="container-fluid row m-auto mt-5">
+        <div class="col-9">
+          <h2>Đăng ký tài khoản</h2>
+          <form class="col-5" action="/users/register-success" method="POST">
+            <div class="form-group mb-3">
+              <label for="exampleInputEmail1">Username</label>
+              <input type="text" class="form-control" id="username" name="username" aria-describedby="emailHelp"
+                placeholder="Nhập Username...">
+            </div>
+            <div class="form-group mb-3">
+              <label for="exampleInputEmail1">Email</label>
+              <input type="text" class="form-control" id="email" name="email" aria-describedby="emailHelp"
+                placeholder="Nhập Email...">
+            </div>
+
+            <div class="form-group mb-3">
+              <label for="exampleInputPassword1">Mật khẩu</label>
+              <input type="password" class="form-control" id="password" name="password" placeholder="Nhập mật khẩu">
+            </div>
+
+            <div class="form-group mb-3">
+              <label for="exampleInputPassword1">Nhập lại mật khẩu</label>
+              <input type="password" class="form-control" id="confirm_password" name="confirm_password"
+                placeholder="Nhập lại mật khẩu ">
+            </div>
+            <div class="form-check">
+              <input type="checkbox" class="form-check-input" id="exampleCheck1">
+              <label class="form-check-label" for="exampleCheck1">Đồng ý với <a href="#"
+                  style="font-weight: 300;font-style: italic;">chính sách và điều khoản sử dụng</a> của chúng
+                tôi</label>
+
+            </div>
+            <button type="submit" class="btn btn-primary">Đăng ký</button>
+          </form>
+        </div>
+        <aside class="col-3 p-0">
+          <div class="card">
+            <div class="card-header" id="mostViewTittle">
+              <h5>Sách xem nhiều</h5>
+            </div>
+            <div class="card-body ">
+              <div id="mostView" class="most-view-book-container">
+                <script>
+                  var mostView = document.querySelector('#mostView');
+                  fetch("http://localhost:3000/book/most-view")
+                    .then(function (res) {
+                      console.log(res); //xem thử trong console của trình duyệt nhé
+                      if (!res.ok) { throw new Error("Lỗi = " + res.status); }
+                      return res.json();
+                    })
+                    .then(function (data) {
+                      console.log(data);//xem thử trong console của trình duyệt nhé
+                      var dataList = data;
+                      var bookList = "";
+                      dataList.forEach((bookItem, index) => {
+                        bookList += `<div class="book-item d-flex align-items-start pb-5">
+                                        <img  src="${bookItem.url}"  alt="" style="width: 55%; object-fit: contain;">
+                                        <div class="book-info ms-1 ">
+                                          <strong class="card-title" style="-webkit-line-clamp: 2;
+                                                                      -webkit-box-orient: vertical;
+                                                                      overflow: hidden;
+                                                                      display: -webkit-box;">${bookItem.name}</strong>
+                                          <p class="card-text" style="-webkit-line-clamp: 3;
+                                                                      -webkit-box-orient: vertical;
+                                                                      overflow: hidden;
+                                                                      display: -webkit-box;">
+                                                                      ${bookItem.description}
+                                          </p>
+                                          <div class="d-flex align-items-center fst-italic" style="font-size:12px; gap:5px">
+                                            <i class="fas fa-eye">${bookItem.view}</i>  
+                                            <a href="/book/detail/${bookItem.id_book}" class="">Xem ngay</a>
+                                          </div>
+                                          
+                                        </div>
+                                      </div>`
+
+                      });
+                      mostView.innerHTML += bookList;
+                    })
+                    .catch(function (error) {
+                      console.log("Lỗi: ", error);
+                    })
+                </script>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+      </div>
+    </main>
+
+
+    <footer class="text-center text-white bg-dark p-2">
+      @PS15288 - NHTM
+    </footer>
+
+    <script>
+      var password = document.getElementById("password")
+        , confirm_password = document.getElementById("confirm_password");
+
+      function validatePassword() {
+        if (password.value != confirm_password.value) {
+          confirm_password.setCustomValidity("Mật khẩu không giống nhau");
+        } else {
+          confirm_password.setCustomValidity('');
+        }
+      }
+      password.onchange = validatePassword;
+      confirm_password.onkeyup = validatePassword;
+    </script>
+
+    <script>
+      function formValidation() {
+        var username = document.getElementById('username').value;
+        var email = document.getElementById('email').value;
+        var password = document.getElementById('password').value;
+        var text = "";
+
+        if (Username(username)) {
+        }
+        if (Email(email)) {
+        }
+        if (Password(password)) {
+        }
+        return false;
+      }
+
+      /*User name input validation*/
+      function Username(usname) {
+        var message = document.getElementsByClassName("error-message");
+        var letters = /^[A-Za-z]+$/;
+        if (usname == "" || usname.match(letters)) {
+          text = "";
+          message[1].innerHTML = text;
+          return true;
+        }
+
+        else {
+          text = "Username should contain only letters";
+          message[1].innerHTML = text;
+          return false;
+        }
+      }
+
+      /*email address input validation*/
+      function Email(email) {
+        var message = document.getElementsByClassName("error-message");
+        var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        var atpos = email.indexOf("@");
+        var dotpos = email.lastIndexOf(".");
+
+        if (email == "" || email.match(mailformat) || atpos > 1 && (dotpos - atpos > 2)) {
+          text = "";
+          message[2].innerHTML = text;
+          return true;
+        }
+
+        else {
+          text = "Wrong email format";
+          message[2].innerHTML = text;
+          return false;
+        }
+      }
+
+      /*validate password*/
+      function Password(password) {
+        var message = document.getElementsByClassName("error-message");
+        var illegalChars = /[\W_]/; // allow only letters and numbers
+        if (illegalChars.test(password)) {
+          text = "Password contains illegal characters";
+          message[5].innerHTML = text;
+          return false;
+        }
+        else if ((password.search(/[0-9]+/) == -1)) {
+          text = "Password should contain at least one number";
+          message[5].innerHTML = text;
+          return false;
+        }
+        else {
+          text = "";
+          message[5].innerHTML = text;
+          return true;
+        }
+      }
+
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+      crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+      crossorigin="anonymous"></script>
+</body>
+
+</html>

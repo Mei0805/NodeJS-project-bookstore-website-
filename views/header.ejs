@@ -1,0 +1,72 @@
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;1,300;1,500&display=swap');
+
+    .bg-header {
+        background-color: #8C4830;
+    }
+
+    .logo {
+        font-family: 'Crimson Pro', serif;
+        font-weight: 500;
+        font-style: italic;
+    }
+
+    .text-logo {
+        color: #F2E3B6;
+    }
+
+    #formSearch {
+        display: flex;
+        justify-content: center;
+        gap: 5px;
+    }
+</style>
+<!-- Start of header area -->
+<header class="navbar navbar-expand-md navbar-dark fixed-top bg-header">
+
+
+    <nav class="row col-12">
+        <div class="col-12 text-end pe-20">
+            <div class="user">
+                <div class="login d-inline text-secondary">
+                    <a href="/login/">Đăng nhập</a> |
+                </div>
+                <div class="register d-inline">
+                    <a href="/register/">Đăng ký</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-3 col-lg-3 text-center logo">
+            <a href="/homepage" class="nav-link">
+                <h2 class="text-logo">Mei Store</h2>
+            </a>
+        </div>
+        <div class="col-5 col-lg-5 collapse navbar-collapse d-flex justify-content-center">
+            <ul class="navbar-nav m-auto text-uppercase">
+                <li class="nav-item me-2">
+                    <a href="/homepage" class="nav-link">Trang chủ</a>
+                </li>
+                <li class="nav-item me-2">
+                    <a href="/bookstore/" class="nav-link">Nhà sách</a>
+                </li>
+                <li class="nav-item me-2">
+                    <a href="#" class="nav-link">Blog tổng hợp</a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-3 col-lg-3 d-flex align-items-center">
+            <form class="inline-form" id="formSearch">
+                <input class="form-control-sm border-outline-primary" type="text" name="search-key" id="search-key">
+                <button class="btn btn-sm btn-outline-warning my-2 my-sm-0  ">Tìm kiếm</button>
+            </form>
+        </div>
+    </nav>
+
+
+</header>
+<!-- End of header area -->
+
+<script>
+    var search_key = document.querySelector("#search-key");
+    
+</script>

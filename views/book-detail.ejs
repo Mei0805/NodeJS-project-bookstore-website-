@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <title>Book</title>
+    <style>
+        .card-img img {
+            transition: transform .4s ease-in-out;
+        }
+
+        a {
+            text-decoration: none;
+            color: black;
+        }
+
+        h1 {
+            font-family: 'Crimson Pro', serif;
+            font-weight: 500;
+            font-style: italic;
+
+            color: #401212;
+        }
+
+        .card-img {
+            overflow: hidden;
+        }
+
+        .card-img img:hover {
+            transform: scale(1.05);
+            overflow: hidden;
+        }
+
+        .tittle-line {
+            font-family: 'Crimson Pro', serif;
+        }
+
+        #mostViewTittle,
+        .detailInfo {
+            background-color: #4e281a;
+            color: white;
+            font-family: 'Crimson Pro', serif;
+            font-weight: 300;
+        }
+    </style>
+</head>
+
+<body>
+    <%- include("header") %>
+
+        <main class="container p-0 m-auto">
+            <img src="https://png.pngtree.com/thumb_back/fw800/back_our/20190621/ourmid/pngtree-taobao-white-minimalist-cosmetics-background-image_192723.jpg"
+                alt="Responsive image" style="width: 100%; height: 50vh; object-fit:cover;">
+
+            <div class="container row p-0 mt-3 d-flex justify-content-center" id="bookInfo">
+
+            </div>
+
+            <div class="container row p-0 m-0 mt-5 d-flex justify-content-between">
+                <div class="col-7 p-0 ms-2 mb-5 border-0">
+                    <div class="text-white p-2 detailInfo">
+                        <h5 class="">Thông tin chi tiết</h5>
+                    </div>
+                    <table class="table p-5" id="bookDetail">
+                        <thead>
+                            <tr>
+                                <th>Công ty phát hành</th>
+                                <th>Nhà xuất bản</th>
+                                <th>Dịch Giả</th>
+                                <th>Số trang</th>
+                            </tr>
+                        </thead>
+
+                        <script>
+                            var bookDetail = document.querySelector("#bookDetail")
+                            fetch(`http://localhost:3000/book/<%=id%>`)
+                                .then(function (res) {
+                                    console.log(res); //xem thử trong console của trình duyệt nhé
+                                    if (!res.ok) { throw new Error("Lỗi = " + res.status); }
+                                    return res.json();
+                                })
+                                .then(function (data) {//xem thử trong console của trình duyệt nhé
+                                    var bookItem = data;
+                                    bookCont += ` <tbody><tr>
+                                                        <td>${bookItem.company}</td>
+                                                        <td>${bookItem.nxb}</td>
+                                                        <td>${bookItem.author}</td>
+                                                        <td>${bookItem.page}</td>
+                                                    </tbody></tr> `
+                                    bookDetail.innerHTML += bookCont;
+
+                                })
+
+                                .catch(function (error) {
+                                    console.log("Lỗi: ", error);
+                                })
+                        </script>
+                    </table>
+                    <div class="m-2">
+                        <strong></strong>
+                        <div id="bookDescription"> </div>
+                    </div>
+                </div>
+                <div class="col-4 ">
+                    <div class="card">
+                        <div class="card-header" id="mostViewTittle">
+                            <h5>Sách xem nhiều</h5>
+                        </div>
+                        <div class="card-body ">
+                            <div id="mostView" class="most-view-book-container">
+                                <script>
+                                    var mostView = document.querySelector('#mostView');
+                                    fetch("http://localhost:3000/book/most-view")
+                                        .then(function (res) {
+                                            console.log(res); //xem thử trong console của trình duyệt nhé
+                                            if (!res.ok) { throw new Error("Lỗi = " + res.status); }
+                                            return res.json();
+                                        })
+                                        .then(function (data) {
+                                            console.log(data);//xem thử trong console của trình duyệt nhé
+                                            var dataList = data;
+                                            var bookList = "";
+                                            dataList.forEach((bookItem, index) => {
+                                                bookList += `<div class="book-item d-flex align-items-start pb-5">
+                                                    <img  src="${bookItem.url}"  alt="" style="width:30%; object-fit: contain;">
+                                                    <div class="book-info ms-1 ">
+                                                      <strong class="card-title" style="-webkit-line-clamp: 2;
+                                                                                  -webkit-box-orient: vertical;
+                                                                                  overflow: hidden;
+                                                                                  display: -webkit-box;">${bookItem.name}</strong>
+                                                      <p class="card-text" style="-webkit-line-clamp: 3;
+                                                                                  -webkit-box-orient: vertical;
+                                                                                  overflow: hidden;
+                                                                                  display: -webkit-box;">
+                                                                                  ${bookItem.description}
+                                                      </p>
+                                                      <div class="d-flex align-items-center fst-italic" style="font-size:12px; gap:5px">
+                                                        <i class="fas fa-eye">${bookItem.view}</i>  
+                                                        <a href="/book/detail/${bookItem.id_book}" class="">Xem ngay</a>
+                                                      </div>
+                                                      
+                                                    </div>
+                                                  </div>`
+
+                                            });
+                                            mostView.innerHTML += bookList;
+                                        })
+                                        .catch(function (error) {
+                                            console.log("Lỗi: ", error);
+                                        })
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                var bookInfo = document.querySelector("#bookInfo");
+                var bookCont = "";
+
+                fetch(`http://localhost:3000/book/<%=id%>`)
+                    .then(function (res) {
+                        console.log(res); //xem thử trong console của trình duyệt nhé
+                        if (!res.ok) { throw new Error("Lỗi = " + res.status); }
+                        return res.json();
+                    })
+                    .then(function (data) {
+                        console.log(data);//xem thử trong console của trình duyệt nhé
+                        var bookItem = data;
+                        bookCont += `  <nav aria-label="breadcrumb">
+                                                <ol class="breadcrumb">
+                                                    <li class="breadcrumb-item"><a href="/homepage" style="text-decoration:none; color:black ">Trang chủ</a></li>
+                                                    <li class="breadcrumb-item active" aria-current="page">Nhà sách</li>
+                                                    <li class="breadcrumb-item active" aria-current="page">${bookItem.name}</li>
+                                                </ol>
+                                            </nav>
+                                            <div class="book-image col-5 d-flex justify-content-center mt-5 mb-5">
+                                                <img src="${bookItem.url}" width="50%" alt="">
+                                            </div>
+
+                                            <div class="book-info col-5 mt-5 mb-5">
+                                                <h1 class="tittle-line">${bookItem.name}</h1>
+                                                <p class="fst-italic">${bookItem.description}
+                                                </p>
+                                                
+                                            </div>`
+                        bookInfo.innerHTML += bookCont;
+                    })
+                    .catch(function (error) {
+                        console.log("Lỗi: ", error);
+                    })
+            </script>
+
+            <div class="related-book mb-5">
+                <h1>Sách cùng thể loại</h1>
+                <div class="card-deck d-flex flex-row flex-wrap justify-content-start" id="sameCategory">
+                    <!-- <div class="card col-3 p-2 border-0">
+                        <div class="card-img p-4 text-center">
+                            <img class="card-img-top" src="https://m.media-amazon.com/images/I/41gr3r3FSWL.jpg"
+                                alt="Card image cap" style="width: 150px;">
+                        </div>
+                        <div class="card-body pt-1 text-center">
+                            <h5 class="card-title text-uppercase">DESIGN FORMULA</h5>
+                            <p class="card-text text-muted" style="font-size: 14px; font-style: italic;">This is a wider
+                                card with supporting text below ...</p>
+                        </div>
+                        <div class="card-footer border-0 bg-light d-flex justify-content-between align-items-center">
+                            <div class="price"> 200 000</div>
+                            <button class="btn btn-sm btn-outline-primary">Xem ngay</button>
+                        </div>
+                    </div> -->
+
+                </div>
+                <script>
+                    var bookList = document.querySelector("#sameCategory");
+                    var listInf = "";
+                    fetch(`http://localhost:3000/book/same-category/<%=id%>`)
+                        .then(function (res) {
+                            console.log(res); //xem thử trong console của trình duyệt nhé
+                            if (!res.ok) { throw new Error("Lỗi = " + res.status); }
+                            return res.json();
+                        })
+                        .then(function (data) {
+                            console.log(data);//xem thử trong console của trình duyệt nhé
+                            var dataList = data;
+                            dataList.forEach((bookItem, index) => {
+                                listInf += `<div class="card col-3 p-2 border-0 pt-5">
+                                                <div class="card-img p-4 text-center">
+                                                     <a href="/book/detail/${bookItem.id_book}">
+                                                    <img class="card-img-top" src="${bookItem.url}" alt="Card image cap"
+                                                    style="width: 150px;">
+                                            </a>
+                                                </div>
+                                                <div class="card-body pt-1 text-center">
+                                                    <h5 class="card-title text-uppercase">${bookItem.name}</h5>
+                                                    <p class="card-text text-muted" style="font-size: 14px; font-style: italic;">T${bookItem.description}</p>
+                                                </div>
+                                                <div class="card-footer border-0 bg-light d-flex justify-content-between align-items-center">
+                                                    <div class="price"> ${bookItem.price}</div>
+                                                    <a href="book/detail/${bookItem.id_book}" class="btn btn-sm btn-outline-primary">Xem ngay</a>
+                                                </div>
+                                            </div>`
+
+                            });
+                            bookList.innerHTML += listInf;
+                        })
+                        .catch(function (error) {
+                            console.log("Lỗi: ", error);
+                        })
+                </script>
+            </div>
+        </main>
+
+
+        <footer class="text-center text-white bg-dark p-2">
+            @PS15288 - NHTM
+        </footer>
+
+        <script>
+            var text = document.querySelector("#text");
+            text.innerHTML= " ";
+        </script>
+
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+</body>
+
+</html>
